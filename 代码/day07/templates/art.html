@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    文章列表
+{% endblock %}
+
+{% block content %}
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>标题</th>
+            <th>描述</th>
+            <th>内容</th>
+            <th>首图</th>
+        </thead>
+        <tbody>
+            {% for art in page %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ art.title }}</td>
+                    <td>{{ art.desc }}</td>
+                    <td>{{ art.content }}</td>
+                    <td><img src="/media/{{ art.icon }}"  style="width:40px; height:40px"></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        <p><a href="{% url 'aap:add' %}">添加文章</a></p>
+        {# 分页 #}
+        <p>
+            {{ page.paginator.num_pages }}
+            {{ page.number }}
+            {{ page.paginator.count }}
+            {% if page.has_previous %}
+            <a href="{% url 'aap:art_list' %}?page={{ page.previous_page_number }}">上一页</a>
+            {% endif %}
+
+            {% for i in page.paginator.page_range %}
+            <a href="{% url 'aap:art_list' %}?page={{ i }}" {% if page.number == i %} style="color:red" {% endif %}>{{ i }}</a>
+            {% endfor %}
+
+            {% if page.has_next %}
+            <a href="{% url 'aap:art_list' %}?page={{ page.next_page_number }}">下一页</a>
+            {% endif %}
+        </p>
+{% endblock %}
